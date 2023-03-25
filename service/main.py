@@ -1,11 +1,24 @@
+from functools import lru_cache
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
+from config.settings import ConfigSettings
 
 from routers.page_router import page_router
 
+# For response serilization
+import pydantic
+from bson import ObjectId
+pydantic.json.ENCODERS_BY_TYPE[ObjectId]=str # type: ignore
+
+
 app = FastAPI()
 
+@lru_cache()
+def get_settings():
+    return ConfigSettings()
+
+# App Config
 origins = [
     "http://localhost:4200",
 ]
@@ -21,6 +34,8 @@ app.add_middleware(
 @app.get("/")
 def read_root():
     return {"Hello": "Welcome to Clipboard"}
+
+# Routers
 
 app.include_router(page_router)
 

@@ -1,0 +1,26 @@
+.card-header {
+    display: flex;
+    margin: 16px;
+    gap: 16px;
+    align-items: center;
+}
+
+.card-header-progress {
+    margin: 0px;
+}
+
+.ql-container.ql-snow {
+    border: none;
+    height: 72vh;
+    overflow: scroll;
+}
+
+@media screen and (max-width: 600px) {
+    .card-header {
+        margin: 0px 0px 16px 0px;
+    }
+
+    .ql-container.ql-snow {
+        height: 64vh;
+    }
+}

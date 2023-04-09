@@ -7,14 +7,18 @@
 .header {
     display: flex;
     align-items: center;
-    gap: 16px
+    justify-content: space-between;
 }
 
 .header-logo {
     width: 40px;
     height: 40px;
+    border-radius: 8px;
 }
 
-.header-title{
+.header-title {
     color: white;
+    display: flex;
+    gap: 16px;
+    align-items: center;
 }

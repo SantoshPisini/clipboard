@@ -1,26 +1,49 @@
-.card-header {
+.landing-container {
+    width: 100%;
+    height: 100%;
     display: flex;
-    margin: 16px;
-    gap: 16px;
-    align-items: center;
+    padding: 16px;
+    background: linear-gradient(-45deg, rgb(104, 105, 246), white, rgb(251, 221, 112));
+    background-size: 400% 400%;
+    animation: animate 12s ease infinite;
+    border-radius: 25px;
 }
 
-.card-header-progress {
-    margin: 0px;
+.landing-images {
+    width: 50%;
+    align-self: center;
+    text-align: -webkit-center;
 }
 
-.ql-container.ql-snow {
-    border: none;
-    height: 72vh;
-    overflow: scroll;
+.landing-image {
+    transform: scale(0.65);
 }
 
-@media screen and (max-width: 600px) {
-    .card-header {
-        margin: 0px 0px 16px 0px;
+.landing-form {
+    width: 100%;
+    padding: 128px;
+    align-self: center;
+    text-align: -webkit-center;
+}
+
+.landing-form-image {
+    margin-bottom: 64px;
+    max-height: 320px;
+    min-height: 25%;
+}
+
+@keyframes animate {
+    0% {
+        background-position: 0% 50%;
     }
 
-    .ql-container.ql-snow {
-        height: 64vh;
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
     }
 }
+
+@media screen and (max-width: 600px) {}

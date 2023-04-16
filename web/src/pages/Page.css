@@ -9,11 +9,12 @@
     margin: 0px;
 }
 
-.ql-container.ql-snow {
-    border: none;
-    max-height: 72vh;
-    min-height: 500px;
-    overflow: scroll;
+.quill {
+    height: calc(100vh - 256px);
+}
+
+.ant-spin {
+    max-height: unset !important;
 }
 
 @media screen and (max-width: 600px) {

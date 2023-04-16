@@ -20,7 +20,7 @@ def get_settings():
 
 # App Config
 origins = [
-    "http://localhost:4200",
+    "http://localhost:3000",
 ]
 
 app.add_middleware(

@@ -30,6 +30,7 @@
     margin-bottom: 64px;
     max-height: 320px;
     min-height: 25%;
+    max-width: 100%;
 }
 
 @keyframes animate {

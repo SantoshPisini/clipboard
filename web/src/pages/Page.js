@@ -2,10 +2,12 @@ import "./Page.css";
 
 import InfoModel from "./InfoModel";
 
-import { Progress, Button } from "antd";
+import { Progress, Button, Spin } from "antd";
 import { useState } from "react";
+import { useParams } from "react-router";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
+import PageService from "../services/PageService";
 
 // TODO: Add tabs
 function Page() {
@@ -70,12 +72,26 @@ function Page() {
     setStorageValue(percentage);
   };
 
-  const sync_page = () => {
-    setIsSyncing(true);
-    setTimeout(() => {
+  const sync_page = async () => {
+    try {
+      setIsSyncing(true);
+      const resposne =
+        pageId === "new"
+          ? await PageService.createPage({
+              content: value,
+              title: "Untitled",
+            })
+          : null;
+      console.log(resposne);
+      onValueChange(resposne.content);
+    } catch (err) {
+      console.error(err);
+    } finally {
       setIsSyncing(false);
-    }, 2000);
+    }
   };
+  const params = useParams();
+  const pageId = params.pageId?.toLowerCase();
 
   return (
     <div>
@@ -91,17 +107,19 @@ function Page() {
           onClick={sync_page}
           disabled={storageValue > 99.999}
         >
-          Sync
+          {pageId === "new" ? "Save New Page" : "Sync"}
         </Button>
         <InfoModel info={2}></InfoModel>
       </div>
-      <ReactQuill
-        theme="snow"
-        value={value}
-        onChange={onValueChange}
-        modules={modules}
-        formats={formats}
-      />
+      <Spin spinning={isSyncing} size="large">
+        <ReactQuill
+          theme="snow"
+          value={value}
+          onChange={onValueChange}
+          modules={modules}
+          formats={formats}
+        />
+      </Spin>
     </div>
   );
 }

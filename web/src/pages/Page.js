@@ -4,6 +4,7 @@ import InfoModel from "./InfoModel";
 import PageService from "../services/PageService";
 
 import { Progress, Button, Spin, message } from "antd";
+import { HomeOutlined } from "@ant-design/icons";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router";
 import { useNavigate } from "react-router-dom";
@@ -130,6 +131,15 @@ function Page() {
     <div>
       {contextHolder}
       <div className="card-header">
+        <Button
+          type="primary"
+          shape="round"
+          icon={<HomeOutlined />}
+          size="middle"
+          onClick={() => {
+            navigate("/");
+          }}
+        />
         <Progress
           className="card-header-progress"
           percent={storageValue}

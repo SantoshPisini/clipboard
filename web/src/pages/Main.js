@@ -23,7 +23,7 @@ function Main() {
     <>
       {contextHolder}
       <div className="landing-container">
-        <div className="landing-images">
+        <div className="landing-images deskop">
           <Carousel autoplay>
             <img className="landing-image" src={image_one} alt="" />
             <img className="landing-image" src={image_two} alt="" />
@@ -32,7 +32,7 @@ function Main() {
             <img className="landing-image" src={image_five} alt="" />
           </Carousel>
         </div>
-        <div>
+        <div className="deskop">
           <Divider type="vertical" style={{ height: "100%" }} />
         </div>
         <div className="landing-form">

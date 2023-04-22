@@ -21,7 +21,6 @@
 
 .landing-form {
     width: 100%;
-    padding: 128px;
     align-self: center;
     text-align: -webkit-center;
 }
@@ -31,6 +30,10 @@
     max-height: 320px;
     min-height: 25%;
     max-width: 100%;
+}
+
+.deskop {
+    display: unset;
 }
 
 @keyframes animate {
@@ -47,4 +50,14 @@
     }
 }
 
-@media screen and (max-width: 600px) {}
+@media screen and (max-width: 768px) {
+    .deskop {
+        display: none;
+    }
+}
+
+@media screen and (min-width: 900px) {
+    .landing-form {
+        padding: 128px;
+    }
+}

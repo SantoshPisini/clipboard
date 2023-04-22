@@ -42,7 +42,7 @@ function App() {
       <Footer>
         {"Clipboard - By "}
         <a
-          href="https://santoshpisini.github.io/"
+          href="https://santoshpisini.github.io?utm_medium=personal-apps&utm_source=clipboard&utm_content=footer"
           target="_blank"
           rel="noopener noreferrer"
         >

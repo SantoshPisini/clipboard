@@ -6,6 +6,7 @@ import image_four from "../assets/svg/4.svg";
 import image_five from "../assets/svg/5.svg";
 import landing_one from "../assets/svg/landing_1.svg";
 import landing_two from "../assets/svg/landing_2.svg";
+import PageService from "../services/PageService";
 
 import { Button, Carousel, Divider, Input, message } from "antd";
 import { FileAddOutlined, FileSyncOutlined } from "@ant-design/icons";
@@ -47,6 +48,12 @@ function Main() {
             onChange={(v) => {
               setValue(v.target?.value?.trim()?.toLowerCase() || "");
             }}
+            onKeyPress={(event, v) => {
+              if (event.key === "Enter") {
+                setValue(event.target?.value?.trim()?.toLowerCase() || "");
+                openPage();
+              }
+            }}
             style={{ marginBottom: "16px" }}
           />
           <Button
@@ -54,14 +61,7 @@ function Main() {
             icon={<FileSyncOutlined />}
             size="large"
             onClick={() => {
-              if (new RegExp(PAGE_ID_REGEX).test(value) && value.length > 1) {
-                navigate(`/page/${value}`);
-              } else {
-                messageApi.open({
-                  type: "error",
-                  content: "Please enter a valid page Id.",
-                });
-              }
+              openPage();
             }}
           >
             Open page
@@ -81,6 +81,30 @@ function Main() {
       </div>
     </>
   );
+
+  async function openPage() {
+    if (new RegExp(PAGE_ID_REGEX).test(value) && value.length > 1) {
+      try {
+        await PageService.getPageByKey(value);
+        navigate(`/page/${value}`);
+      } catch (error) {
+        messageApi.open({
+          type: "error",
+          duration: 4800,
+          content:
+            error.response.status === 404
+              ? value +
+                " page not found! Please check the page id and try again!"
+              : "Unable to load page at this moment! Please try again later.",
+        });
+      }
+    } else {
+      messageApi.open({
+        type: "error",
+        content: "Please enter a valid page Id.",
+      });
+    }
+  }
 }
 
 export default Main;

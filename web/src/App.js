@@ -3,11 +3,12 @@ import logo from "./assets/logo512.png";
 
 import Main from "./pages/Main";
 import Page from "./pages/Page";
+import About from "./pages/About";
 import NotFound from "./pages/NotFound";
+import ShareModel from "./models/ShareModel";
 
 import { Layout } from "antd";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import ShareModel from "./pages/ShareModel";
 
 const { Header, Footer, Content } = Layout;
 
@@ -21,6 +22,10 @@ function App() {
     {
       path: "page/:pageId",
       element: <Page />,
+    },
+    {
+      path: "about",
+      element: <About />,
     },
     {
       path: "*",
@@ -39,15 +44,18 @@ function App() {
       <Content className="content">
         <RouterProvider router={router} />
       </Content>
-      <Footer>
-        {"Clipboard - By "}
-        <a
-          href="https://santoshpisini.github.io?utm_medium=personal-apps&utm_source=clipboard&utm_content=footer"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Santosh Pisini
-        </a>
+      <Footer className="footer">
+        <span>
+          {"Clipboard - By "}
+          <a
+            href="https://santoshpisini.github.io?utm_medium=personal-apps&utm_source=clipboard&utm_content=footer"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Santosh Pisini
+          </a>
+        </span>
+        <a href={`/about`}>About</a>
       </Footer>
     </Layout>
   );

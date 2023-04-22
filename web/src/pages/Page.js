@@ -1,6 +1,6 @@
 import "./Page.css";
 
-import InfoModel from "./InfoModel";
+import InfoModel from "../models/InfoModel";
 import PageService from "../services/PageService";
 
 import { Progress, Button, Spin, message } from "antd";

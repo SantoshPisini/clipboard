@@ -8,7 +8,7 @@ import landing_one from "../assets/svg/landing_1.svg";
 import landing_two from "../assets/svg/landing_2.svg";
 import PageService from "../services/PageService";
 
-import { Button, Carousel, Divider, Input, message } from "antd";
+import { Button, Carousel, Divider, Input, message, Spin } from "antd";
 import { FileAddOutlined, FileSyncOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
@@ -18,6 +18,7 @@ function Main() {
   const PAGE_ID_REGEX = "^[a-z0-9_.-]*$";
   const [value, setValue] = useState("");
   const [inputError, setinputError] = useState("");
+  const [isSyncing, setIsSyncing] = useState(false);
   const [messageApi, contextHolder] = message.useMessage();
 
   return (
@@ -42,70 +43,84 @@ function Main() {
             src={new Date().getMinutes() % 2 === 0 ? landing_one : landing_two}
             alt=""
           />
-          <Input
-            placeholder="Enter your page id here..."
-            maxLength={10}
-            value={value || ""}
-            allowClear
-            status={inputError === "" ? "" : "error"}
-            onChange={(v) => {
-              setValue(v.target?.value?.trim()?.toLowerCase() || "");
-            }}
-            onKeyPress={(event, v) => {
-              if (event.key === "Enter") {
-                setValue(event.target?.value?.trim()?.toLowerCase() || "");
-                openPage();
-              }
-            }}
-            style={{ marginBottom: "16px" }}
-          />
-          {inputError === "" ? (
-            ""
-          ) : (
-            <p style={{ color: "red", margin: "0px 0px 8px 0px" }}>
-              {inputError}
-            </p>
-          )}
-          <div className="action-bar">
-            <Button
-              type="primary"
-              icon={<FileSyncOutlined />}
-              size="large"
-              onClick={() => {
-                openPage();
+          <Spin spinning={isSyncing} size="large">
+            <Input
+              placeholder="Enter your page id here..."
+              maxLength={10}
+              value={value || ""}
+              allowClear
+              status={inputError === "" ? "" : "error"}
+              onChange={(v) => {
+                setValue(v.target?.value?.trim()?.toLowerCase() || "");
               }}
-            >
-              Open page
-            </Button>
-            <Button
-              type="default"
-              icon={<FileAddOutlined />}
-              size="large"
-              onClick={() => {
-                openPage(true);
+              onKeyPress={(event, v) => {
+                if (event.key === "Enter") {
+                  setValue(event.target?.value?.trim()?.toLowerCase() || "");
+                  openPage();
+                }
               }}
-            >
-              New Page
-            </Button>
-          </div>
+              style={{ marginBottom: "16px" }}
+            />
+            {inputError === "" ? (
+              ""
+            ) : (
+              <p style={{ color: "red", margin: "0px 0px 8px 0px" }}>
+                {inputError}
+              </p>
+            )}
+            <div className="action-bar">
+              <Button
+                type="primary"
+                icon={<FileSyncOutlined />}
+                size="large"
+                onClick={() => {
+                  openPage();
+                }}
+              >
+                Open page
+              </Button>
+              <Button
+                type="default"
+                icon={<FileAddOutlined />}
+                size="large"
+                onClick={() => {
+                  openPage(true);
+                }}
+              >
+                New Page
+              </Button>
+            </div>
+          </Spin>
         </div>
       </div>
     </>
   );
 
   async function openPage(isNewPage = false) {
+    setIsSyncing(true);
     if (new RegExp(PAGE_ID_REGEX).test(value) && value.length > 1) {
       try {
-        await PageService.getPageByKey(value);
+        const response = await PageService.getPageByKey(value);
+        setIsSyncing(false);
+        if (isNewPage && response) {
+          messageApi.open({
+            type: "info",
+            duration: 3000,
+            content:
+              "Page already exists! Please try creating with new page id or try to 'Open page'.",
+          });
+          setinputError("");
+        }
         !isNewPage && navigate(`/page/${value}`);
       } catch (error) {
         // Create page case
         if (isNewPage && error.response.status === 404) {
-          createPage();
+          await createPage();
         } else {
+          setIsSyncing(false);
           messageApi.open({
             type: "error",
-            duration: 4800,
+            duration: 3000,
             content:
               error.response.status === 404
                 ? value +
@@ -121,6 +136,7 @@ function Main() {
         }
       }
     } else {
+      setIsSyncing(false);
       setinputError(
         isNewPage
           ? `Please enter a new page Id(any text) to get started.`
@@ -129,21 +145,26 @@ function Main() {
     }
   }
 
-  function createPage() {
-    PageService.createPage({
+  async function createPage() {
+    await PageService.createPage({
       content: "",
       title: "Untitled",
       key: value,
-    }).then((_) => {
-      messageApi.open({
-        type: "success",
-        duration: 2000,
-        content: "Successfully created new page with id: " + value,
+    })
+      .then((_) => {
+        messageApi.open({
+          type: "success",
+          duration: 2000,
+          content: "Successfully created new page with id: " + value,
+        });
+        setTimeout(() => {
+          setIsSyncing(false);
+          navigate(`/page/${value}`);
+        }, 2100);
+      })
+      .finally(() => {
+        setIsSyncing(false);
       });
-      setTimeout(() => {
-        navigate(`/page/${value}`);
-      }, 2100);
-    });
   }
 }
 

@@ -17,6 +17,7 @@ function Main() {
   const navigate = useNavigate();
   const PAGE_ID_REGEX = "^[a-z0-9_.-]*$";
   const [value, setValue] = useState("");
+  const [inputError, setinputError] = useState("");
   const [messageApi, contextHolder] = message.useMessage();
 
   return (
@@ -45,6 +46,8 @@ function Main() {
             placeholder="Enter your page id here..."
             maxLength={10}
             value={value || ""}
+            allowClear
+            status={inputError === "" ? "" : "error"}
             onChange={(v) => {
               setValue(v.target?.value?.trim()?.toLowerCase() || "");
             }}
@@ -56,27 +59,35 @@ function Main() {
             }}
             style={{ marginBottom: "16px" }}
           />
-          <Button
-            type="primary"
-            icon={<FileSyncOutlined />}
-            size="large"
-            onClick={() => {
-              openPage();
-            }}
-          >
-            Open page
-          </Button>
-          <Divider>OR</Divider>
-          <Button
-            type="default"
-            icon={<FileAddOutlined />}
-            size="large"
-            onClick={() => {
-              openPage(true);
-            }}
-          >
-            Get started with 'New Page'
-          </Button>
+          {inputError === "" ? (
+            ""
+          ) : (
+            <p style={{ color: "red", margin: "0px 0px 8px 0px" }}>
+              {inputError}
+            </p>
+          )}
+          <div className="action-bar">
+            <Button
+              type="primary"
+              icon={<FileSyncOutlined />}
+              size="large"
+              onClick={() => {
+                openPage();
+              }}
+            >
+              Open page
+            </Button>
+            <Button
+              type="default"
+              icon={<FileAddOutlined />}
+              size="large"
+              onClick={() => {
+                openPage(true);
+              }}
+            >
+              New Page
+            </Button>
+          </div>
         </div>
       </div>
     </>
@@ -101,13 +112,20 @@ function Main() {
                   " page not found! Please check the page id and try again!"
                 : "Unable to load page at this moment! Please try again later.",
           });
+          setinputError(
+            error.response.status === 404
+              ? value +
+                  " page not found! Please check the page id and try again!"
+              : "Unable to load page at this moment! Please try again later."
+          );
         }
       }
     } else {
-      messageApi.open({
-        type: "error",
-        content: `Please enter a valid ${isNewPage ? "new " : ""}page Id.`,
-      });
+      setinputError(
+        isNewPage
+          ? `Please enter a new page Id(any text) to get started.`
+          : "Please enter a valid page id."
+      );
     }
   }
 

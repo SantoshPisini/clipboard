@@ -36,6 +36,13 @@
     display: unset;
 }
 
+.action-bar {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+}
+
 @keyframes animate {
     0% {
         background-position: 0% 50%;

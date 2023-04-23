@@ -26,7 +26,7 @@ function About() {
         due diligence.
       </p>
       <p className="imp-text">
-        DO NOT 🚫 use it for unethical and illegal activites.
+        DO NOT 🚫 use it for unethical or illegal activites.
       </p>
       <h1>Inspiration</h1>
       <p>

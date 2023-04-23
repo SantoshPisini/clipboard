@@ -9,6 +9,7 @@ import ShareModel from "./models/ShareModel";
 
 import { Layout } from "antd";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import Privacy from "./pages/Privacy";
 
 const { Header, Footer, Content } = Layout;
 
@@ -26,6 +27,10 @@ function App() {
     {
       path: "about",
       element: <About />,
+    },
+    {
+      path: "privacy",
+      element: <Privacy />,
     },
     {
       path: "*",
@@ -55,7 +60,10 @@ function App() {
             Santosh Pisini
           </a>
         </span>
-        <a href={`/about`}>About</a>
+        <span className="footer-cards">
+          <a href={`/about`}>About</a>
+          <a href={`/privacy`}>Privacy</a>
+        </span>
       </Footer>
     </Layout>
   );

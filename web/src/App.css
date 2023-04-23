@@ -31,3 +31,8 @@
     display: flex;
     justify-content: space-between;
 }
+
+.footer-cards {
+    display: flex;
+    gap: 16px;
+}

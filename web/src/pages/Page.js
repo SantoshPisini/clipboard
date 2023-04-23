@@ -15,7 +15,7 @@ import "react-quill/dist/quill.snow.css";
 function Page() {
   let isInitialized = false;
 
-  const MAX_LIMIT = 13 * 1024 * 1024;
+  const MAX_LIMIT = process.env.REACT_APP_PAGE_SIZE * 1024 * 1024;
   const params = useParams();
   const navigate = useNavigate();
   const pageId = params.pageId?.toLowerCase();
@@ -153,7 +153,7 @@ function Page() {
         >
           {pageId === "new" ? "Save New Page" : "Sync"}
         </Button>
-        <InfoModel info={pageData}></InfoModel>
+        {pageId === "new" ? null : <InfoModel info={pageData}></InfoModel>}
       </div>
       <Spin spinning={isSyncing} size="large">
         <ReactQuill

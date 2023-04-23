@@ -72,7 +72,7 @@ function Main() {
             icon={<FileAddOutlined />}
             size="large"
             onClick={() => {
-              navigate("/page/NEW");
+              openPage(true);
             }}
           >
             Get started with 'New Page'
@@ -82,28 +82,50 @@ function Main() {
     </>
   );
 
-  async function openPage() {
+  async function openPage(isNewPage = false) {
     if (new RegExp(PAGE_ID_REGEX).test(value) && value.length > 1) {
       try {
         await PageService.getPageByKey(value);
-        navigate(`/page/${value}`);
+        !isNewPage && navigate(`/page/${value}`);
       } catch (error) {
-        messageApi.open({
-          type: "error",
-          duration: 4800,
-          content:
-            error.response.status === 404
-              ? value +
-                " page not found! Please check the page id and try again!"
-              : "Unable to load page at this moment! Please try again later.",
-        });
+        // Create page case
+        if (isNewPage && error.response.status === 404) {
+          createPage();
+        } else {
+          messageApi.open({
+            type: "error",
+            duration: 4800,
+            content:
+              error.response.status === 404
+                ? value +
+                  " page not found! Please check the page id and try again!"
+                : "Unable to load page at this moment! Please try again later.",
+          });
+        }
       }
     } else {
       messageApi.open({
         type: "error",
-        content: "Please enter a valid page Id.",
+        content: `Please enter a valid ${isNewPage ? "new " : ""}page Id.`,
       });
     }
+  }
+
+  function createPage() {
+    PageService.createPage({
+      content: "",
+      title: "Untitled",
+      key: value,
+    }).then((_) => {
+      messageApi.open({
+        type: "success",
+        duration: 2000,
+        content: "Successfully created new page with id: " + value,
+      });
+      setTimeout(() => {
+        navigate(`/page/${value}`);
+      }, 2100);
+    });
   }
 }
 

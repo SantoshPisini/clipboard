@@ -3,6 +3,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
 from config.settings import ConfigSettings
+from config.settings import settings
 
 from routers.page_router import page_router
 
@@ -21,6 +22,7 @@ def get_settings():
 # App Config
 origins = [
     "http://localhost:3000",
+    settings.ui_url
 ]
 
 app.add_middleware(
@@ -46,3 +48,4 @@ if __name__ == "__main__":
 
 # pipenv install -r requirements.txt
 # uvicorn main:app --reload 
+# uvicorn main:app --host 0.0.0.0 --port 10000

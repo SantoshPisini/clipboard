@@ -24,6 +24,7 @@ function Page() {
   const [pageData, setPageData] = useState(null);
   const [isSyncing, setIsSyncing] = useState(false);
   const [storageValue, setStorageValue] = useState(0);
+  const [lastSyncAt, setLastSyncAt] = useState(new Date());
   const [messageApi, contextHolder] = message.useMessage();
 
   const modules = {
@@ -93,6 +94,7 @@ function Page() {
               Object.assign(pageData, { content: value })
             );
       onValueChange(resposne?.content);
+      setLastSyncAt(new Date());
     } catch (err) {
       messageApi.open({
         type: "error",
@@ -155,6 +157,9 @@ function Page() {
         </Button>
         {pageId === "new" ? null : <InfoModel info={pageData}></InfoModel>}
       </div>
+      <p className="last-sync">
+        Last synced at: {lastSyncAt?.toLocaleString() || ""}
+      </p>
       <Spin spinning={isSyncing} size="large">
         <ReactQuill
           theme="snow"

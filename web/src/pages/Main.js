@@ -19,6 +19,7 @@ function Main() {
   const [value, setValue] = useState("");
   const [inputError, setinputError] = useState("");
   const [isSyncing, setIsSyncing] = useState(false);
+  const [startServer, setStartServer] = useState(false);
   const [messageApi, contextHolder] = message.useMessage();
 
   return (
@@ -91,6 +92,11 @@ function Main() {
               </Button>
             </div>
           </Spin>
+          {startServer && isSyncing ? (
+            <p>Please wait backend server is starting... :)</p>
+          ) : (
+            <></>
+          )}
         </div>
       </div>
     </>
@@ -98,6 +104,9 @@ function Main() {
 
   async function openPage(isNewPage = false) {
     setIsSyncing(true);
+    setTimeout(() => {
+      setStartServer(true);
+    }, 5000);
     if (new RegExp(PAGE_ID_REGEX).test(value) && value.length > 1) {
       try {
         const response = await PageService.getPageByKey(value);
